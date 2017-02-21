@@ -48,8 +48,16 @@ entry *append(char lastName[], entry *e)
 
 int entry_cmp(char a[], char b[])
 {
-    if(strlen(a)==strlen(b))
-        return strcmp(a, b);
+    /*if(strlen(a)==strlen(b))
+        return strcmp(a, b);*/
+    int i, l;
+    if (strlen(a) == strlen(b)) {
+        l = strlen(a);
+        for (i = l-1; i >= 0; i--) {
+            if(*(a+i) != *(b+i))
+                return *(a+i) - *(b+i);
+        }
+    }
     return strlen(a) - strlen(b);
 }
 
