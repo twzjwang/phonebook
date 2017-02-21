@@ -10,7 +10,7 @@ entry *findName(char lastName[], entry *pHead)
     entry *temp = pHead;
     int cmp;
     while (temp) {
-        cmp = strcmp(lastName, temp->lastName);
+        cmp = entry_cmp(lastName, temp->lastName);
         if (cmp == 0)
             return temp;
         else if (cmp < 0)
@@ -26,7 +26,7 @@ entry *append(char lastName[], entry *e)
     entry *temp = e;
 
     while (temp->lastName[0]) {
-        if (strcmp(lastName, temp->lastName) <= 0) {
+        if (entry_cmp(lastName, temp->lastName) <= 0) {
             if (!temp->pLeft) {
                 temp->pLeft = (entry *) malloc(sizeof(entry));
                 temp->pLeft->pRight = NULL;
@@ -44,6 +44,13 @@ entry *append(char lastName[], entry *e)
     }
     strcpy(temp->lastName, lastName);
     return e;
+}
+
+int entry_cmp(char a[], char b[])
+{
+    if(strlen(a)==strlen(b))
+        return strcmp(a, b);
+    return strlen(a) - strlen(b);
 }
 
 void free_bst(entry *e)
