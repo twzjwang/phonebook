@@ -19,13 +19,15 @@ typedef struct __PHONE_BOOK_ENTRY {
     char city[16];
     char state[2];
     char zip[5];
+    struct __PHONE_BOOK_ENTRY *pNext;
     struct __PHONE_BOOK_ENTRY *pRight;
     struct __PHONE_BOOK_ENTRY *pLeft;
 } entry;
 
 entry *findName(char lastName[], entry *pHead);
 entry *append(char lastName[], entry *e);
-int entry_cmp(char a[], char b[]);
+entry *new_balance_bst(entry *root, int num);
+entry *balance_bst(entry *e, int num, entry *root);
 void free_bst(entry *e);
 
 #endif

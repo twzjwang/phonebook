@@ -4,13 +4,13 @@
 
 #include "phonebook_opt_bst.h"
 
-/* FILL YOUR OWN IMPLEMENTATION HERE! */
+//search by bst
 entry *findName(char lastName[], entry *pHead)
 {
     entry *temp = pHead;
     int cmp;
     while (temp) {
-        cmp = entry_cmp(lastName, temp->lastName);
+        cmp = strcmp(lastName, temp->lastName);
         if (cmp == 0)
             return temp;
         else if (cmp < 0)
@@ -21,44 +21,52 @@ entry *findName(char lastName[], entry *pHead)
     return NULL;
 }
 
+//orig append
 entry *append(char lastName[], entry *e)
 {
-    entry *temp = e;
+    /* allocate memory for the new entry and put lastName */
+    e->pNext = (entry *) malloc(sizeof(entry));
+    e = e->pNext;
+    strcpy(e->lastName, lastName);
+    e->pNext = NULL;
+    e->pRight = NULL;
+    e->pLeft = NULL;
 
-    while (temp->lastName[0]) {
-        if (entry_cmp(lastName, temp->lastName) <= 0) {
-            if (!temp->pLeft) {
-                temp->pLeft = (entry *) malloc(sizeof(entry));
-                temp->pLeft->pRight = NULL;
-                temp->pLeft->pLeft = NULL;
-            }
-            temp = temp->pLeft;
-        } else {
-            if(!temp->pRight) {
-                temp->pRight = (entry *) malloc(sizeof(entry));
-                temp->pRight->pRight = NULL;
-                temp->pRight->pLeft = NULL;
-            }
-            temp = temp->pRight;
-        }
-    }
-    strcpy(temp->lastName, lastName);
     return e;
 }
 
-int entry_cmp(char a[], char b[])
+entry *new_balance_bst(entry *root, int num)
 {
-    /*if(strlen(a)==strlen(b))
-        return strcmp(a, b);*/
-    int i, l;
-    if (strlen(a) == strlen(b)) {
-        l = strlen(a);
-        for (i = l-1; i >= 0; i--) {
-            if(*(a+i) != *(b+i))
-                return *(a+i) - *(b+i);
-        }
+    if(!num)
+        return NULL;
+    entry *bst_root = NULL;
+    bst_root = balance_bst(bst_root, num, root);
+    free(root);
+    return bst_root;
+}
+
+
+entry *balance_bst(entry *e, int num, entry *root)
+{
+    static entry *bst_build_cur = NULL;
+    if(!num)
+        return NULL;
+    if(!bst_build_cur)
+        bst_build_cur = root;
+
+    if(!e) {
+        e = (entry *) malloc(sizeof(entry));
+        e->pNext = NULL;
+        e->pRight = NULL;
+        e->pLeft = NULL;
     }
-    return strlen(a) - strlen(b);
+
+    int mid = (num +1)/2;
+    e->pLeft = balance_bst(e->pLeft, mid - 1, root);
+    strcpy(e->lastName, bst_build_cur->lastName);
+    bst_build_cur = bst_build_cur->pNext;
+    e->pRight = balance_bst(e->pRight, num - mid, root);
+    return e;
 }
 
 void free_bst(entry *e)

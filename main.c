@@ -8,11 +8,13 @@
 
 #ifdef OPT_BST
 #define OUT_FILE "opt.txt"
+#elif OPT_STRUCT
+#define OUT_FILE "opt.txt"
 #else
 #define OUT_FILE "orig.txt"
 #endif
 
-#define DICT_FILE "./dictionary/all-names.txt"
+#define DICT_FILE "./dictionary/words.txt"
 
 static double diff_in_second(struct timespec t1, struct timespec t2)
 {
@@ -31,6 +33,9 @@ int main(int argc, char *argv[])
 {
     FILE *fp;
     int i = 0;
+#ifdef OPT_BST
+    int count_node = 0;
+#endif
     char line[MAX_LAST_NAME_SIZE];
     struct timespec start, end;
     double cpu_time1, cpu_time2;
@@ -64,8 +69,14 @@ int main(int argc, char *argv[])
             i++;
         line[i - 1] = '\0';
         i = 0;
+#ifdef OPT_BST
+        count_node++;
+#endif
         e = append(line, e);
     }
+#ifdef OPT_BST
+    pHead = new_balance_bst(pHead, count_node);
+#endif
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
 
@@ -75,14 +86,14 @@ int main(int argc, char *argv[])
     e = pHead;
 
     /* the givn last name to find */
-    //char input[MAX_LAST_NAME_SIZE] = "zyxel";
-    char input[MAX_LAST_NAME_SIZE] = "zora";
+    char input[MAX_LAST_NAME_SIZE] = "zyxel";
+    //char input[MAX_LAST_NAME_SIZE] = "zora";
     e = pHead;
 
     assert(findName(input, e) &&
            "Did you implement findName() in " IMPL "?");
-    //assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
-    assert(0 == strcmp(findName(input, e)->lastName, "zora"));
+    assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
+    //assert(0 == strcmp(findName(input, e)->lastName, "zora"));
 
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
