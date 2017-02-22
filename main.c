@@ -33,10 +33,12 @@ int main(int argc, char *argv[])
 {
     FILE *fp;
     int i = 0;
+    char line[MAX_LAST_NAME_SIZE];
+
 #ifdef OPT_BST
     int count_node = 0;
 #endif
-    char line[MAX_LAST_NAME_SIZE];
+
     struct timespec start, end;
     double cpu_time1, cpu_time2;
 
@@ -64,19 +66,29 @@ int main(int argc, char *argv[])
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
+
+
+#ifdef OPT_BST
+    while (fgets(line, sizeof(line), fp)) {
+        while (line[i] != '\0')
+            i++;
+        count_node++;
+    }
+#else
     while (fgets(line, sizeof(line), fp)) {
         while (line[i] != '\0')
             i++;
         line[i - 1] = '\0';
         i = 0;
-#ifdef OPT_BST
-        count_node++;
-#endif
         e = append(line, e);
     }
-#ifdef OPT_BST
-    pHead = new_balance_bst(pHead, count_node);
 #endif
+
+#ifdef OPT_BST
+    fseek(fp, 0, SEEK_SET);
+    pHead = new_balance_bst(pHead, count_node, fp);
+#endif
+
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
 

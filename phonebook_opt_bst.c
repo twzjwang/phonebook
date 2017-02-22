@@ -35,25 +35,20 @@ entry *append(char lastName[], entry *e)
     return e;
 }
 
-entry *new_balance_bst(entry *root, int num)
+entry *new_balance_bst(entry *root, int num, FILE *fp)
 {
     if(!num)
         return NULL;
     entry *bst_root = NULL;
-    bst_root = balance_bst(bst_root, num, root);
-    free(root);
+    bst_root = balance_bst(bst_root, num, root, fp);
     return bst_root;
 }
 
 
-entry *balance_bst(entry *e, int num, entry *root)
+entry *balance_bst(entry *e, int num, entry *root, FILE *fp)
 {
-    static entry *bst_build_cur = NULL;
     if(!num)
         return NULL;
-    if(!bst_build_cur)
-        bst_build_cur = root;
-
     if(!e) {
         e = (entry *) malloc(sizeof(entry));
         e->pNext = NULL;
@@ -62,10 +57,19 @@ entry *balance_bst(entry *e, int num, entry *root)
     }
 
     int mid = (num +1)/2;
-    e->pLeft = balance_bst(e->pLeft, mid - 1, root);
-    strcpy(e->lastName, bst_build_cur->lastName);
-    bst_build_cur = bst_build_cur->pNext;
-    e->pRight = balance_bst(e->pRight, num - mid, root);
+    int i;
+    char line[MAX_LAST_NAME_SIZE];
+    e->pLeft = balance_bst(e->pLeft, mid - 1, root, fp);
+
+    if(fgets(line, sizeof(line), fp)) {
+        i = 0;
+        while (line[i] != '\0')
+            i++;
+        line[i - 1] = '\0';
+        strcpy(e->lastName, line);
+    }
+
+    e->pRight = balance_bst(e->pRight, num - mid, root, fp);
     return e;
 }
 

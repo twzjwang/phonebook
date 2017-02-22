@@ -26,8 +26,8 @@ typedef struct __PHONE_BOOK_ENTRY {
 
 entry *findName(char lastName[], entry *pHead);
 entry *append(char lastName[], entry *e);
-entry *new_balance_bst(entry *root, int num);
-entry *balance_bst(entry *e, int num, entry *root);
+entry *new_balance_bst(entry *root, int num, FILE *fp);
+entry *balance_bst(entry *e, int num, entry *root, FILE *fp);
 void free_bst(entry *e);
 
 #endif
