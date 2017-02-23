@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
 
-
 #ifdef OPT_BST
     while (fgets(line, sizeof(line), fp)) {
         while (line[i] != '\0')
@@ -99,13 +98,11 @@ int main(int argc, char *argv[])
 
     /* the givn last name to find */
     char input[MAX_LAST_NAME_SIZE] = "zyxel";
-    //char input[MAX_LAST_NAME_SIZE] = "zora";
     e = pHead;
 
     assert(findName(input, e) &&
            "Did you implement findName() in " IMPL "?");
     assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
-    //assert(0 == strcmp(findName(input, e)->lastName, "zora"));
 
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));

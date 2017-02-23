@@ -11,47 +11,37 @@ entry *findName(char lastName[], entry *pHead)
     int cmp;
     while (temp) {
         cmp = strcmp(lastName, temp->lastName);
-        if (cmp == 0)
+        if (!cmp)
             return temp;
-        else if (cmp < 0)
-            temp = temp->pLeft;
-        else
-            temp = temp->pRight;
+        temp = (cmp < 0) ? temp->pLeft : temp->pRight;
     }
     return NULL;
 }
 
-//orig append
-entry *append(char lastName[], entry *e)
-{
-    /* allocate memory for the new entry and put lastName */
-    e->pNext = (entry *) malloc(sizeof(entry));
-    e = e->pNext;
-    strcpy(e->lastName, lastName);
-    e->pNext = NULL;
-    e->pRight = NULL;
-    e->pLeft = NULL;
-
-    return e;
-}
-
+//recursively create balanced bst
 entry *new_balance_bst(entry *root, int num, FILE *fp)
 {
     if(!num)
         return NULL;
+
+    //new tree root
     entry *bst_root = NULL;
     bst_root = balance_bst(bst_root, num, root, fp);
     return bst_root;
 }
 
 
+
+
 entry *balance_bst(entry *e, int num, entry *root, FILE *fp)
 {
+    //return if current node is leaf
     if(!num)
         return NULL;
+
+    //malloc e if NULL
     if(!e) {
         e = (entry *) malloc(sizeof(entry));
-        e->pNext = NULL;
         e->pRight = NULL;
         e->pLeft = NULL;
     }
@@ -59,8 +49,11 @@ entry *balance_bst(entry *e, int num, entry *root, FILE *fp)
     int mid = (num +1)/2;
     int i;
     char line[MAX_LAST_NAME_SIZE];
+
+    //making link between *e and left child
     e->pLeft = balance_bst(e->pLeft, mid - 1, root, fp);
 
+    //read file and copy
     if(fgets(line, sizeof(line), fp)) {
         i = 0;
         while (line[i] != '\0')
@@ -69,10 +62,13 @@ entry *balance_bst(entry *e, int num, entry *root, FILE *fp)
         strcpy(e->lastName, line);
     }
 
+    // making link between *e and right child
     e->pRight = balance_bst(e->pRight, num - mid, root, fp);
+
     return e;
 }
 
+//recursively free bst memory
 void free_bst(entry *e)
 {
     if (e) {
