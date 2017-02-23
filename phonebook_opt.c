@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "phonebook_opt_bst.h"
+#include "phonebook_opt.h"
 
 //search by bst
 entry *findName(char lastName[], entry *pHead)
