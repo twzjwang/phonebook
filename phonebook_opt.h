@@ -3,6 +3,7 @@
 
 #define MAX_LAST_NAME_SIZE 16
 
+#define OPT 1
 #define OPT_BST 1
 typedef struct __PHONE_BOOK_ENTRY_INFO {
     char firstName[16];

@@ -6,10 +6,12 @@
 
 #include IMPL
 
-#ifdef OPT_BST
+#ifdef OPT
 #define OUT_FILE "opt.txt"
+#elif OPT_BST
+#define OUT_FILE "opt_bst.txt"
 #elif OPT_STRUCT
-#define OUT_FILE "opt.txt"
+#define OUT_FILE "opt_struct.txt"
 #else
 #define OUT_FILE "orig.txt"
 #endif
