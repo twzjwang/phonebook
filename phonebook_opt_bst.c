@@ -30,9 +30,6 @@ entry *new_balance_bst(entry *root, int num, FILE *fp)
     return bst_root;
 }
 
-
-
-
 entry *balance_bst(entry *e, int num, entry *root, FILE *fp)
 {
     //return if current node is leaf
